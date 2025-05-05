@@ -1,4 +1,3 @@
-// lib/screens/favorites_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/enhanced_recipe.dart';
@@ -47,7 +46,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     });
     
     try {
-      // Get favorite recipe IDs
       final favoriteIds = await _userInteractionService.getFavoriteIds();
       
       if (favoriteIds.isEmpty) {
@@ -58,7 +56,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         return;
       }
       
-      // Load recipe details for each ID
       List<EnhancedRecipe> recipes = [];
       for (final id in favoriteIds) {
         try {
@@ -88,7 +85,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final isFavorite = await _userInteractionService.toggleFavorite(recipe.id);
     
     if (!isFavorite) {
-      // Recipe was removed from favorites
       setState(() {
         _favoriteRecipes.removeWhere((r) => r.id == recipe.id);
       });
