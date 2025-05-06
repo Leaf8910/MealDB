@@ -1,4 +1,3 @@
-// models/recipe.dart
 class Recipe {
   final String id;
   final String name;
@@ -19,29 +18,46 @@ class Recipe {
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
-    // Create a map for ingredients and measurements
-    Map<String, String> ingredientsMap = {};
+    final Map<String, String> ingredients = {};
     
-    // TheMealDB API provides ingredients as ingredient1, ingredient2, etc.
-    // and measurements as measure1, measure2, etc.
     for (int i = 1; i <= 20; i++) {
       final ingredient = json['strIngredient$i'];
       final measure = json['strMeasure$i'];
       
-      // Only add if ingredient is not empty
-      if (ingredient != null && ingredient.toString().trim().isNotEmpty) {
-        ingredientsMap[ingredient] = measure ?? '';
+      if (ingredient != null && ingredient.toString().trim().isNotEmpty &&
+          measure != null && measure.toString().trim().isNotEmpty) {
+        ingredients[ingredient] = measure;
       }
     }
-
+    
     return Recipe(
-      id: json['idMeal'] ?? '',
-      name: json['strMeal'] ?? '',
-      category: json['strCategory'] ?? '',
-      area: json['strArea'] ?? '',
+      id: json['idMeal'],
+      name: json['strMeal'],
+      category: json['strCategory'] ?? 'Unknown',
+      area: json['strArea'] ?? 'Unknown',
       instructions: json['strInstructions'] ?? '',
       thumbnail: json['strMealThumb'] ?? '',
-      ingredients: ingredientsMap,
+      ingredients: ingredients,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {
+      'idMeal': id,
+      'strMeal': name,
+      'strCategory': category,
+      'strArea': area,
+      'strInstructions': instructions,
+      'strMealThumb': thumbnail,
+    };
+    
+    int i = 1;
+    for (final entry in ingredients.entries) {
+      json['strIngredient$i'] = entry.key;
+      json['strMeasure$i'] = entry.value;
+      i++;
+    }
+    
+    return json;
   }
 }
